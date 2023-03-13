@@ -1,7 +1,7 @@
 <!--START_SECTION:waka-->
 
 ```text
-From: 04 March 2023 - To: 11 March 2023
+From: 05 March 2023 - To: 12 March 2023
 
 C++          4 hrs 57 mins   >>>>>>>>>>>>-------------   49.13 %
 TypeScript   1 hr 9 mins     >>>----------------------   11.40 %
