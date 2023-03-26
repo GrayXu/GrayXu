@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```text
-From: 17 March 2023 - To: 24 March 2023
+From: 18 March 2023 - To: 25 March 2023
 
-C++           9 hrs 6 mins    >>>>>>>>>>>>>>>>>--------   67.55 %
-Other         1 hr 49 mins    >>>----------------------   13.59 %
+C++           9 hrs 55 mins   >>>>>>>>>>>>>>>>>--------   68.45 %
+Other         1 hr 49 mins    >>>----------------------   12.63 %
 ```
 
 <!--END_SECTION:waka-->
