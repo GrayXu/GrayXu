@@ -16,8 +16,4 @@ Other        14 mins         -------------------------   01.09 %
 
 <!-- [![grayxu's github stats](https://github-readme-stats.vercel.app/api?username=grayxu&count_private=true&show_icons=true)](https://github.com/grayxu) -->
 
-
-Currently a Ph.D. student at HUST in storage systems
-<!-- add this part due to Github student benefits requirements 🤷‍♂️ -->
-
 ✔ Know more about me: [About - Gray's grind](https://www.grayxu.cn/)
