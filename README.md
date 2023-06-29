@@ -1,7 +1,7 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 20 June 2023 - To: 27 June 2023
+From: 21 June 2023 - To: 28 June 2023
 
 Markdown   5 hrs 17 mins   >>>>>>>>>>>>>>>>>>>------   75.35 %
 TeX        1 hr 27 mins    >>>>>--------------------   20.85 %
