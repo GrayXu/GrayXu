@@ -1,9 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 31 August 2023 - To: 07 September 2023
+From: 01 September 2023 - To: 08 September 2023
 
-sh   0 secs          >>>>>>>>>>>>>>>>>>>>>>>>>   100.00 %
+sh         1 hr 53 mins    >>>>>>>>>>>>>>>>>>-------   73.54 %
+Markdown   40 mins         >>>>>>>------------------   26.46 %
 ```
 
 <!--END_SECTION:waka-->
