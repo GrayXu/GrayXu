@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 30 November 2023 - To: 07 December 2023
+From: 01 December 2023 - To: 08 December 2023
 
-Markdown   57 mins         >>>>>>>>>>>>>>-----------   57.83 %
-sh         41 mins         >>>>>>>>>>>--------------   42.17 %
+Markdown   46 mins         >>>>>>>>>>>>>------------   52.64 %
+sh         41 mins         >>>>>>>>>>>>-------------   47.36 %
 ```
 
 <!--END_SECTION:waka-->
