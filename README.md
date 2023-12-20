@@ -1,14 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 11 December 2023 - To: 18 December 2023
+From: 12 December 2023 - To: 19 December 2023
 
-Markdown     1 hr 30 mins    >>>>>>>>>>>>-------------   48.77 %
-sh           39 mins         >>>>>--------------------   21.49 %
-Text         28 mins         >>>>---------------------   15.40 %
-YAML         26 mins         >>>>---------------------   14.19 %
-Other        0 secs          -------------------------   00.09 %
-TypeScript   0 secs          -------------------------   00.06 %
+Markdown   1 hr 41 mins    >>>>>>>>>>>>>>>>>>>>>----   84.27 %
+sh         18 mins         >>>>---------------------   15.73 %
 ```
 
 <!--END_SECTION:waka-->
