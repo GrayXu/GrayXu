@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 17 December 2023 - To: 24 December 2023
+From: 18 December 2023 - To: 25 December 2023
 
 Markdown     4 hrs 4 mins    >>>>>>>>>>>--------------   43.86 %
-sh           3 hrs 19 mins   >>>>>>>>>----------------   35.74 %
+sh           3 hrs 19 mins   >>>>>>>>>----------------   35.73 %
 Python       1 hr 13 mins    >>>----------------------   13.13 %
 JSON         20 mins         >------------------------   03.76 %
 Other        12 mins         >------------------------   02.24 %
