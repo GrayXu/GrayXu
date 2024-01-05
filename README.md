@@ -1,10 +1,13 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 27 December 2023 - To: 03 January 2024
+From: 28 December 2023 - To: 04 January 2024
 
-Markdown   5 mins          >>>>>>>>>>>>>>>>>>>>>>>>-   97.75 %
-sh         0 secs          >------------------------   02.25 %
+Markdown   28 mins         >>>>>>>>>>>>>>>>---------   64.48 %
+sh         14 mins         >>>>>>>>-----------------   33.13 %
+Bash       0 secs          -------------------------   01.24 %
+C++        0 secs          -------------------------   00.63 %
+Other      0 secs          -------------------------   00.52 %
 ```
 
 <!--END_SECTION:waka-->
