@@ -1,10 +1,9 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 03 February 2024 - To: 10 February 2024
+From: 04 February 2024 - To: 11 February 2024
 
-sh    3 hrs 20 mins   >>>>>>>>>>>>>>>>>>>>>>>>-   97.13 %
-C++   5 mins          >------------------------   02.87 %
+sh   3 hrs 26 mins   >>>>>>>>>>>>>>>>>>>>>>>>>   100.00 %
 ```
 
 <!--END_SECTION:waka-->
