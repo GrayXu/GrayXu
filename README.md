@@ -1,7 +1,7 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 13 April 2024 - To: 20 April 2024
+From: 14 April 2024 - To: 21 April 2024
 
 sh         7 hrs 5 mins    >>>>>>>>>>>>-------------   47.11 %
 C          5 hrs 25 mins   >>>>>>>>>----------------   36.04 %
