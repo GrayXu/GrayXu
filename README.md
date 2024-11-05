@@ -1,15 +1,15 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 27 October 2024 - To: 03 November 2024
+From: 28 October 2024 - To: 04 November 2024
 
-TeX               6 hrs 10 mins   >>>>>>>>-----------------   30.84 %
-Markdown          4 hrs 30 mins   >>>>>>-------------------   22.48 %
-Other             2 hrs 16 mins   >>>----------------------   11.31 %
-BibTeX            1 hr 45 mins    >>-----------------------   08.78 %
-TypeScript        1 hr 43 mins    >>-----------------------   08.62 %
-zsh               1 hr 10 mins    >------------------------   05.88 %
-JavaScript        59 mins         >------------------------   04.97 %
+TeX               6 hrs 5 mins    >>>>>>>>-----------------   30.33 %
+Markdown          4 hrs 11 mins   >>>>>--------------------   20.89 %
+Other             2 hrs 16 mins   >>>----------------------   11.30 %
+BibTeX            1 hr 45 mins    >>-----------------------   08.77 %
+TypeScript        1 hr 43 mins    >>-----------------------   08.61 %
+zsh               1 hr 34 mins    >>-----------------------   07.87 %
+JavaScript        59 mins         >------------------------   04.96 %
 ```
 
 <!--END_SECTION:waka-->
