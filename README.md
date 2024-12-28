@@ -1,15 +1,15 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 19 December 2024 - To: 26 December 2024
+From: 20 December 2024 - To: 27 December 2024
 
-TeX            12 hrs 15 mins  >>>>>>>>>>>--------------   44.23 %
-Markdown       4 hrs 16 mins   >>>>---------------------   15.42 %
-zsh            3 hrs 58 mins   >>>>---------------------   14.31 %
-Python         2 hrs 48 mins   >>>----------------------   10.12 %
-TOML           1 hr 15 mins    >------------------------   04.52 %
-Text           1 hr 5 mins     >------------------------   03.92 %
-TypeScript     1 hr 1 min      >------------------------   03.68 %
+TeX          12 hrs 36 mins  >>>>>>>>>>---------------   41.58 %
+zsh          7 hrs 10 mins   >>>>>>-------------------   23.69 %
+Markdown     2 hrs 59 mins   >>-----------------------   09.87 %
+Python       2 hrs 48 mins   >>-----------------------   09.27 %
+TOML         1 hr 15 mins    >------------------------   04.13 %
+TypeScript   1 hr 1 min      >------------------------   03.36 %
+Text         45 mins         >------------------------   02.50 %
 ```
 
 <!--END_SECTION:waka-->
