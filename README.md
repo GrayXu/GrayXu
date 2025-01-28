@@ -1,12 +1,12 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 19 January 2025 - To: 26 January 2025
+From: 20 January 2025 - To: 27 January 2025
 
-Markdown   1 hr 29 mins    >>>>>>>>>>>>>>>----------   61.16 %
-zsh        33 mins         >>>>>>-------------------   22.83 %
-TeX        23 mins         >>>>---------------------   15.99 %
-Other      0 secs          -------------------------   00.02 %
+Markdown   3 hrs 22 mins   >>>>>>>>>>>>>>>>>>>------   77.62 %
+zsh        34 mins         >>>----------------------   13.36 %
+TeX        23 mins         >>-----------------------   09.01 %
+Other      0 secs          -------------------------   00.01 %
 ```
 
 <!--END_SECTION:waka-->
