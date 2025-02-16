@@ -1,14 +1,14 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 07 February 2025 - To: 14 February 2025
+From: 08 February 2025 - To: 15 February 2025
 
-Markdown     5 hrs 18 mins   >>>>>>>>>>>>>>>----------   59.16 %
-zsh          2 hrs 33 mins   >>>>>>>------------------   28.54 %
-Other        38 mins         >>-----------------------   07.11 %
-Python       17 mins         >------------------------   03.27 %
-JavaScript   6 mins          -------------------------   01.16 %
-TypeScript   4 mins          -------------------------   00.77 %
+Markdown     4 hrs 14 mins   >>>>>>>>>>>>>------------   50.99 %
+zsh          2 hrs 49 mins   >>>>>>>>>----------------   34.01 %
+Other        47 mins         >>-----------------------   09.42 %
+Python       17 mins         >------------------------   03.52 %
+JavaScript   6 mins          -------------------------   01.24 %
+TypeScript   4 mins          -------------------------   00.82 %
 ```
 
 <!--END_SECTION:waka-->
