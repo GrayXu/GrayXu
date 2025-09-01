@@ -1,10 +1,9 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 23 August 2025 - To: 30 August 2025
+From: 24 August 2025 - To: 31 August 2025
 
-JSON    8 mins          >>>>>>>>>>>>>>>>>>>>-----   80.35 %
-Other   2 mins          >>>>>--------------------   19.65 %
+No activity tracked
 ```
 
 <!--END_SECTION:waka-->
