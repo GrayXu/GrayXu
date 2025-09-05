@@ -1,10 +1,12 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 27 August 2025 - To: 03 September 2025
+From: 28 August 2025 - To: 04 September 2025
 
-TeX    54 mins         >>>>>>>>>>>>>>>>>>>>-----   78.06 %
-YAML   15 mins         >>>>>--------------------   21.94 %
+TeX        2 hrs 2 mins    >>>>>>>>>>>--------------   44.25 %
+Markdown   1 hr 8 mins     >>>>>>-------------------   24.79 %
+YAML       44 mins         >>>>---------------------   16.11 %
+Other      41 mins         >>>>---------------------   14.86 %
 ```
 
 <!--END_SECTION:waka-->
