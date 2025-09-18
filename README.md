@@ -1,12 +1,12 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 09 September 2025 - To: 16 September 2025
+From: 10 September 2025 - To: 17 September 2025
 
-Markdown   3 hrs 34 mins   >>>>>>>>>>>>>>>----------   58.60 %
-TLA        1 hr 21 mins    >>>>>>-------------------   22.27 %
-TeX        1 hr 10 mins    >>>>>--------------------   19.12 %
-INI        0 secs          -------------------------   00.01 %
+Markdown   11 hrs 20 mins  >>>>>>>>>>>>>>>>>>>>>----   84.73 %
+TLA        1 hr 21 mins    >>>----------------------   10.17 %
+TeX        40 mins         >------------------------   05.09 %
+INI        0 secs          -------------------------   00.00 %
 ```
 
 <!--END_SECTION:waka-->
