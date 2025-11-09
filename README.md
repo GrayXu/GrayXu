@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 31 October 2025 - To: 07 November 2025
+From: 01 November 2025 - To: 08 November 2025
 
-Markdown   5 hrs 39 mins   >>>>>>>>>>>>>>>----------   58.84 %
-zsh        3 hrs 57 mins   >>>>>>>>>>---------------   41.16 %
+Markdown   5 hrs 39 mins   >>>>>>>>>>>>>>-----------   57.30 %
+zsh        4 hrs 12 mins   >>>>>>>>>>>--------------   42.70 %
 ```
 
 <!--END_SECTION:waka-->
