@@ -1,15 +1,11 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 04 December 2025 - To: 11 December 2025
+From: 05 December 2025 - To: 12 December 2025
 
-Python     3 hrs 32 mins   >>>>>>>>>>>>-------------   46.89 %
-Markdown   2 hrs 13 mins   >>>>>>>------------------   29.37 %
-zsh        1 hr 14 mins    >>>>---------------------   16.46 %
-Other      31 mins         >>-----------------------   06.92 %
-Makefile   0 secs          -------------------------   00.22 %
-Bash       0 secs          -------------------------   00.13 %
-CSV        0 secs          -------------------------   00.00 %
+zsh        1 hr 31 mins    >>>>>>>>>>>>>>>>---------   65.00 %
+Markdown   46 mins         >>>>>>>>-----------------   32.99 %
+Other      2 mins          >------------------------   02.00 %
 ```
 
 <!--END_SECTION:waka-->
