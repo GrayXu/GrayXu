@@ -1,15 +1,15 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 17 February 2026 - To: 24 February 2026
+From: 18 February 2026 - To: 25 February 2026
 
-Other         9 hrs 44 mins         >>>>>>>>-----------------   31.68 %
-Markdown      9 hrs 21 mins         >>>>>>>>-----------------   30.44 %
-zsh           6 hrs 34 mins         >>>>>--------------------   21.36 %
-Python        2 hrs 7 mins          >>-----------------------   06.89 %
-Bash          1 hr 2 mins           >------------------------   03.40 %
-JavaScript    22 mins               -------------------------   01.20 %
-TOML          20 mins               -------------------------   01.13 %
+Markdown      12 hrs 4 mins         >>>>>>>>>----------------   35.32 %
+Other         10 hrs 15 mins        >>>>>>>>-----------------   30.01 %
+zsh           6 hrs 13 mins         >>>>>--------------------   18.24 %
+Python        2 hrs 26 mins         >>-----------------------   07.13 %
+Bash          1 hr 1 min            >------------------------   03.00 %
+JavaScript    25 mins               -------------------------   01.22 %
+Image         20 mins               -------------------------   01.01 %
 ```
 
 <!--END_SECTION:waka-->
