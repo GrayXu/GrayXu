@@ -1,12 +1,11 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 05 April 2026 - To: 12 April 2026
+From: 06 April 2026 - To: 13 April 2026
 
-Markdown   2 hrs 20 mins         >>>>>>>>>>>>>------------   52.06 %
-Other      2 hrs 8 mins          >>>>>>>>>>>>-------------   47.61 %
-zsh        0 secs                -------------------------   00.29 %
-Svelte     0 secs                -------------------------   00.04 %
+Markdown   1 hr 22 mins          >>>>>>>>>>>>>>>----------   59.05 %
+Other      57 mins               >>>>>>>>>>---------------   40.86 %
+Svelte     0 secs                -------------------------   00.08 %
 ```
 
 <!--END_SECTION:waka-->
