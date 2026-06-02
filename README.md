@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 24 May 2026 - To: 31 May 2026
+From: 25 May 2026 - To: 01 June 2026
 
-Markdown   1 hr 24 mins          >>>>>>>>>>>>>>>>>>>------   74.07 %
-Other      29 mins               >>>>>>-------------------   25.93 %
+Markdown   36 mins               >>>>>>>>>>>>>>-----------   55.51 %
+Other      29 mins               >>>>>>>>>>>--------------   44.49 %
 ```
 
 <!--END_SECTION:waka-->
