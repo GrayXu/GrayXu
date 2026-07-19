@@ -1,10 +1,10 @@
 <!--START_SECTION:waka-->
 
 ```txt
-From: 10 July 2026 - To: 17 July 2026
+From: 11 July 2026 - To: 18 July 2026
 
-Markdown       4 hrs 44 mins         >>>>>>>>>>>>>>>>>>>>>----   84.90 %
-Other          50 mins               >>>>---------------------   15.09 %
+Markdown       4 hrs 21 mins         >>>>>>>>>>>>>>>>>>>>-----   80.39 %
+Other          1 hr 3 mins           >>>>>--------------------   19.60 %
 Image (jpeg)   0 secs                -------------------------   00.01 %
 ```
 
