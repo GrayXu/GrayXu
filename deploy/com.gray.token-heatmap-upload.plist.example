@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.gray.token-heatmap-upload</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/gray/.local/lib/token-heatmap/upload_ccusage.py</string>
+    <string>--endpoint</string>
+    <string>https://cpa.grayxu.cn/token-heatmap/api/v1/ccusage</string>
+    <string>--token-file</string>
+    <string>/Users/gray/.config/token-heatmap/ingest-token</string>
+    <string>--machine-id</string>
+    <string>gray-mac</string>
+    <string>--days</string>
+    <string>3</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/gray/.bun/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>900</integer>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/gray/Library/Logs/token-heatmap-upload.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/gray/Library/Logs/token-heatmap-upload.log</string>
+</dict>
+</plist>

@@ -1,0 +1,52 @@
+name: Update token heatmap
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub cron is UTC: 04:00/16:00 = 12:00/00:00 Asia/Shanghai.
+    - cron: "0 4,16 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: token-heatmap-readme
+  cancel-in-progress: false
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile
+        uses: actions/checkout@v4
+        with:
+          path: profile
+
+      - name: Check out token data
+        uses: actions/checkout@v4
+        with:
+          ref: token-data
+          path: token-data
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Render README
+        run: |
+          PYTHONPATH=profile/src python -m token_heatmap.data render \
+            --input token-data/daily_usage.json \
+            --repo profile
+
+      - name: Commit generated files
+        working-directory: profile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- README.md assets/heatmap/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore: update token heatmap"
+          git push origin HEAD:master

@@ -1,0 +1,26 @@
+[Unit]
+Description=Token heatmap ccusage ingest API
+After=network.target
+
+[Service]
+Type=simple
+User=token-heatmap
+Group=token-heatmap
+WorkingDirectory=/opt/token-heatmap
+Environment=PYTHONPATH=/opt/token-heatmap/src
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=TOKEN_HEATMAP_DB_PATH=/var/lib/token-heatmap/token_usage.sqlite
+Environment=TOKEN_HEATMAP_INGEST_TOKEN_FILE=/etc/token-heatmap/ingest-token
+Environment=TOKEN_HEATMAP_TIMEZONE=Asia/Shanghai
+ExecStart=/usr/bin/python3 -m token_heatmap.server
+Restart=on-failure
+RestartSec=5s
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/token-heatmap
+
+[Install]
+WantedBy=multi-user.target
