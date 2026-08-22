@@ -238,11 +238,11 @@
     },
     {
       "date": "2026-08-23",
-      "total_tokens": 96280376
+      "total_tokens": 170540965
     }
   ],
   "end_date": "2026-08-23",
-  "generated_at": "2026-08-23T01:33:50.168450+08:00",
+  "generated_at": "2026-08-23T02:06:36.672495+08:00",
   "schema_version": 1,
   "start_date": "2026-06-25",
   "timezone": "Asia/Shanghai"
