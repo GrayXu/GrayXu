@@ -4,3 +4,6 @@ __pycache__/
 .pytest_cache/
 .venv/
 data/
+inbox/
+config.ini
+*.local.ini

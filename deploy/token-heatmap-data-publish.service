@@ -9,13 +9,8 @@ User=token-heatmap
 Group=token-heatmap
 Environment=HOME=/var/lib/token-heatmap
 Environment=PYTHONDONTWRITEBYTECODE=1
-Environment=TOKEN_HEATMAP_REPO=/opt/token-heatmap
-Environment=TOKEN_HEATMAP_DATA_REPO=/var/lib/token-heatmap/data-branch
-Environment=TOKEN_HEATMAP_DB_PATH=/var/lib/token-heatmap/token_usage.sqlite
-Environment=TOKEN_HEATMAP_CPA_DB_PATH=/var/lib/cpa-manager-plus/usage.sqlite
-Environment=TOKEN_HEATMAP_CCUSAGE_INBOX=/var/lib/token-heatmap/inbox
-Environment=TOKEN_HEATMAP_TIMEZONE=Asia/Shanghai
-ExecStart=/opt/token-heatmap/scripts/publish-data.sh
+Environment=PYTHONPATH=/opt/token-heatmap/src
+ExecStart=/usr/bin/python3 -m token_heatmap.app --config /etc/token-heatmap/config.ini sync
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true

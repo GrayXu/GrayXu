@@ -1,6 +1,4 @@
-import argparse
 import json
-import os
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -16,12 +14,11 @@ from .db import (
     replace_source_range,
     upsert_source_usage,
 )
-from .heatmap import DISPLAY_DAYS, atomic_write, update_readme
+from .heatmap import DISPLAY_DAYS, atomic_write
 from .models import AggregatedUsage
 
 
 SCHEMA_VERSION = 1
-HISTORY_DAYS = 365
 
 
 @dataclass(frozen=True)
@@ -49,14 +46,16 @@ def import_ccusage_snapshots(
 
 def refresh_daily_usage(
     database: Path,
-    cpa_database: Path,
+    cpa_database: Optional[Path],
     timezone_name: str,
     history_days: int,
     today: date,
 ) -> List[AggregatedUsage]:
     start_date = today - timedelta(days=history_days - 1)
-    cpa_usage = CPAAdapter(cpa_database, timezone_name).get_daily_usage(
-        start_date, today
+    cpa_usage = (
+        CPAAdapter(cpa_database, timezone_name).get_daily_usage(start_date, today)
+        if cpa_database
+        else []
     )
     connection = connect(database)
     try:
@@ -186,78 +185,3 @@ def load_data_file(path: Path) -> UsageData:
     if days[-1].date != end_date:
         raise ValueError("end_date does not match the final days row")
     return UsageData(timezone_name, generated_at, days)
-
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Publish or render token heatmap data")
-    subparsers = parser.add_subparsers(dest="command", required=True)
-
-    export = subparsers.add_parser("export", help="Export total-only daily data")
-    export.add_argument("--output", type=Path, required=True)
-    export.add_argument(
-        "--database",
-        type=Path,
-        default=Path(os.environ.get("TOKEN_HEATMAP_DB_PATH", "data/token_usage.sqlite")),
-    )
-    export.add_argument(
-        "--cpa-database",
-        type=Path,
-        default=Path(
-            os.environ.get(
-                "TOKEN_HEATMAP_CPA_DB_PATH",
-                "/var/lib/cpa-manager-plus/usage.sqlite",
-            )
-        ),
-    )
-    export.add_argument(
-        "--timezone",
-        default=os.environ.get("TOKEN_HEATMAP_TIMEZONE", "Asia/Shanghai"),
-    )
-    export.add_argument(
-        "--ccusage-inbox",
-        type=Path,
-        default=Path(
-            os.environ.get(
-                "TOKEN_HEATMAP_CCUSAGE_INBOX",
-                "/var/lib/token-heatmap/inbox",
-            )
-        ),
-    )
-    export.add_argument("--today", type=date.fromisoformat)
-
-    render = subparsers.add_parser("render", help="Render README from exported data")
-    render.add_argument("--input", type=Path, required=True)
-    render.add_argument("--repo", type=Path, required=True)
-    return parser
-
-
-def main() -> None:
-    args = build_parser().parse_args()
-    if args.command == "export":
-        timezone = ZoneInfo(args.timezone)
-        today = args.today or datetime.now(timezone).date()
-        import_ccusage_snapshots(args.database, args.ccusage_inbox, args.timezone)
-        daily_usage = refresh_daily_usage(
-            args.database,
-            args.cpa_database,
-            args.timezone,
-            HISTORY_DAYS,
-            today,
-        )
-        write_data_file(args.output, daily_usage, args.timezone, today)
-        return
-
-    usage_data = load_data_file(args.input)
-    start_date = usage_data.days[0].date
-    end_date = usage_data.days[-1].date
-    update_readme(
-        args.repo / "README.md",
-        args.repo / "assets" / "heatmap",
-        usage_data.days,
-        start_date,
-        end_date,
-    )
-
-
-if __name__ == "__main__":
-    main()

@@ -14,3 +14,16 @@
 <!-- [![grayxu's github stats](https://github-readme-stats.vercel.app/api?username=grayxu&count_private=true&show_icons=true)](https://github.com/grayxu) -->
 
 Know more about me: [About - Gray's grind](https://www.grayxu.cn/).
+
+<details>
+<summary>Reuse</summary>
+
+```bash
+python3 -m pip install .
+cp config.example.ini config.ini
+token-heatmap --config config.ini sync
+```
+
+Set `primary = false` to send ccusage snapshots over SCP. Set it to `true` to aggregate the inbox and publish `token-data`. SSH and Git credentials stay in the system SSH configuration, never in this file.
+
+</details>

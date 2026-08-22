@@ -1,11 +1,12 @@
 import unittest
 from datetime import date
+from pathlib import Path
 from unittest.mock import patch
 
-from client.upload_ccusage import build_days, copy_snapshot
+from token_heatmap.app import build_days, copy_snapshot, load_config
 
 
-class ClientTests(unittest.TestCase):
+class AppTests(unittest.TestCase):
     def test_build_days_normalizes_ccusage_and_fills_missing_dates(self):
         report = {
             "daily": [
@@ -26,12 +27,10 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(days[0]["total_tokens"], 100)
         self.assertEqual(days[1]["total_tokens"], 0)
 
-    @patch("client.upload_ccusage.subprocess.run")
+    @patch("token_heatmap.app.subprocess.run")
     def test_copy_snapshot_uses_scp_then_atomic_remote_move(self, run):
         payload = {"machine_id": "gray-mac", "days": [{"date": "2026-08-21"}]}
-        self.assertEqual(
-            copy_snapshot("ali", "/var/lib/token-heatmap/inbox", payload), 1
-        )
+        copy_snapshot("ali", "/var/lib/token-heatmap/inbox", payload)
         scp, ssh = run.call_args_list
         self.assertEqual(scp.args[0][0:2], ["/usr/bin/scp", "-q"])
         self.assertRegex(
@@ -41,6 +40,16 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(ssh.args[0][0:2], ["/usr/bin/ssh", "ali"])
         self.assertIn("chown root:token-heatmap", ssh.args[0][2])
         self.assertIn("mv -f", ssh.args[0][2])
+
+    def test_example_config_has_both_roles_and_no_secret_fields(self):
+        path = Path(__file__).parents[1] / "config.example.ini"
+        config = load_config(path)
+        self.assertFalse(config.getboolean("app", "primary"))
+        self.assertTrue(config.has_section("sender"))
+        self.assertTrue(config.has_section("primary"))
+        text = path.read_text().lower()
+        for forbidden in ("password", "private_key", "api_key", "token ="):
+            self.assertNotIn(forbidden, text)
 
 
 if __name__ == "__main__":

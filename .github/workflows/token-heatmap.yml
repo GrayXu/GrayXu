@@ -35,7 +35,7 @@ jobs:
 
       - name: Render README
         run: |
-          PYTHONPATH=profile/src python -m token_heatmap.data render \
+          PYTHONPATH=profile/src python -m token_heatmap.app render \
             --input token-data/daily_usage.json \
             --repo profile
 
