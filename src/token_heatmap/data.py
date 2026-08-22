@@ -7,8 +7,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 from zoneinfo import ZoneInfo
 
+from .ccusage import parse_ccusage_payload
 from .cpa import CPAAdapter
-from .db import aggregate_range, connect, fetch_daily_usage, replace_source_range
+from .db import (
+    aggregate_range,
+    connect,
+    fetch_daily_usage,
+    replace_source_range,
+    upsert_source_usage,
+)
 from .heatmap import DISPLAY_DAYS, atomic_write, update_readme
 from .models import AggregatedUsage
 
@@ -22,6 +29,22 @@ class UsageData:
     timezone: str
     generated_at: datetime
     days: List[AggregatedUsage]
+
+
+def import_ccusage_snapshots(
+    database: Path, inbox: Path, timezone_name: str
+) -> int:
+    usages = []
+    for path in sorted(Path(inbox).glob("*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        usages.extend(parse_ccusage_payload(payload, timezone_name))
+    if not usages:
+        return 0
+    connection = connect(database)
+    try:
+        return upsert_source_usage(connection, usages)
+    finally:
+        connection.close()
 
 
 def refresh_daily_usage(
@@ -190,6 +213,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--timezone",
         default=os.environ.get("TOKEN_HEATMAP_TIMEZONE", "Asia/Shanghai"),
     )
+    export.add_argument(
+        "--ccusage-inbox",
+        type=Path,
+        default=Path(
+            os.environ.get(
+                "TOKEN_HEATMAP_CCUSAGE_INBOX",
+                "/var/lib/token-heatmap/inbox",
+            )
+        ),
+    )
     export.add_argument("--today", type=date.fromisoformat)
 
     render = subparsers.add_parser("render", help="Render README from exported data")
@@ -203,6 +236,7 @@ def main() -> None:
     if args.command == "export":
         timezone = ZoneInfo(args.timezone)
         today = args.today or datetime.now(timezone).date()
+        import_ccusage_snapshots(args.database, args.ccusage_inbox, args.timezone)
         daily_usage = refresh_daily_usage(
             args.database,
             args.cpa_database,

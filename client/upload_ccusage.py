@@ -3,17 +3,15 @@ import argparse
 import json
 import os
 import re
+import shlex
 import shutil
 import socket
-import stat
 import subprocess
 import sys
+import tempfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
-from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 
@@ -21,16 +19,6 @@ def default_machine_id() -> str:
     hostname = socket.gethostname().split(".", 1)[0]
     normalized = re.sub(r"[^A-Za-z0-9._-]+", "-", hostname).strip("-.")
     return normalized[:64] or "unknown-machine"
-
-
-def read_token(path: Path) -> str:
-    mode = stat.S_IMODE(path.stat().st_mode)
-    if mode & 0o077:
-        raise RuntimeError(f"token file permissions must be 600, got {mode:o}")
-    token = path.read_text(encoding="utf-8").strip()
-    if len(token) < 32:
-        raise RuntimeError("ingest token must contain at least 32 characters")
-    return token
 
 
 def _integer(item: Dict[str, Any], key: str) -> int:
@@ -114,48 +102,61 @@ def run_ccusage(
     return result
 
 
-def upload(endpoint: str, token: str, payload: dict) -> dict:
-    parsed = urlparse(endpoint)
-    if parsed.scheme != "https" and parsed.hostname not in {"127.0.0.1", "localhost"}:
-        raise RuntimeError("endpoint must use HTTPS unless it targets localhost")
-    body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
-    request = Request(
-        endpoint,
-        data=body,
-        method="POST",
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "User-Agent": "token-heatmap-ccusage/0.1",
-        },
+def copy_snapshot(
+    remote_host: str, remote_directory: str, payload: Dict[str, Any]
+) -> int:
+    machine_id = payload["machine_id"]
+    if not isinstance(machine_id, str) or not re.fullmatch(
+        r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", machine_id
+    ):
+        raise RuntimeError("invalid machine_id")
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", remote_host):
+        raise RuntimeError("invalid remote host")
+    remote_path = Path(remote_directory)
+    if (
+        not re.fullmatch(r"/[A-Za-z0-9._/-]+", remote_directory)
+        or not remote_path.is_absolute()
+        or ".." in remote_path.parts
+    ):
+        raise RuntimeError("remote directory must be an absolute normalized path")
+
+    destination = remote_path / f"{machine_id}.json"
+    temporary = remote_path / f".{machine_id}.{os.getpid()}.json.tmp"
+    with tempfile.TemporaryDirectory() as directory:
+        local_path = Path(directory) / f"{machine_id}.json"
+        local_path.write_text(
+            json.dumps(payload, separators=(",", ":")) + "\n",
+            encoding="utf-8",
+        )
+        subprocess.run(
+            ["/usr/bin/scp", "-q", str(local_path), f"{remote_host}:{temporary}"],
+            check=True,
+            timeout=120,
+        )
+
+    source = shlex.quote(str(temporary))
+    target = shlex.quote(str(destination))
+    command = (
+        f"chown root:token-heatmap {source} && chmod 640 {source} && "
+        f"mv -f {source} {target}"
     )
-    try:
-        with urlopen(request, timeout=30) as response:
-            result = json.loads(response.read())
-    except HTTPError as error:
-        detail = error.read(512).decode("utf-8", errors="replace")
-        raise RuntimeError(f"upload failed with HTTP {error.code}: {detail}") from error
-    except URLError as error:
-        raise RuntimeError(f"upload failed: {error.reason}") from error
-    if not isinstance(result, dict):
-        raise RuntimeError("server returned an invalid response")
-    return result
+    subprocess.run(
+        ["/usr/bin/ssh", remote_host, command], check=True, timeout=30
+    )
+    return len(payload["days"])
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Upload a ccusage snapshot")
     parser.add_argument(
-        "--endpoint", default=os.environ.get("TOKEN_HEATMAP_ENDPOINT")
+        "--remote-host", default=os.environ.get("TOKEN_HEATMAP_REMOTE_HOST", "ali")
     )
     parser.add_argument(
-        "--token-file",
-        type=Path,
-        default=Path(
-            os.environ.get(
-                "TOKEN_HEATMAP_TOKEN_FILE",
-                "~/.config/token-heatmap/ingest-token",
-            )
-        ).expanduser(),
+        "--remote-directory",
+        default=os.environ.get(
+            "TOKEN_HEATMAP_REMOTE_DIRECTORY",
+            "/var/lib/token-heatmap/inbox",
+        ),
     )
     parser.add_argument(
         "--machine-id",
@@ -175,8 +176,6 @@ def main() -> None:
     args = build_parser().parse_args()
     if not 1 <= args.days <= 400:
         raise SystemExit("--days must be between 1 and 400")
-    if not args.endpoint and not args.dry_run:
-        raise SystemExit("--endpoint or TOKEN_HEATMAP_ENDPOINT is required")
     bunx = args.bunx or shutil.which("bunx")
     if not bunx:
         raise SystemExit("bunx was not found")
@@ -195,9 +194,8 @@ def main() -> None:
         sys.stdout.write("\n")
         return
 
-    token = read_token(args.token_file)
-    result = upload(args.endpoint, token, payload)
-    print(f"uploaded {result.get('upserted', 0)} daily snapshots")
+    copied = copy_snapshot(args.remote_host, args.remote_directory, payload)
+    print(f"copied {copied} daily snapshots to {args.remote_host}")
 
 
 if __name__ == "__main__":

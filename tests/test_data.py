@@ -5,7 +5,12 @@ from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
-from token_heatmap.data import build_data_payload, load_data_file
+from token_heatmap.data import (
+    build_data_payload,
+    import_ccusage_snapshots,
+    load_data_file,
+)
+from token_heatmap.db import connect
 from token_heatmap.heatmap import (
     DISPLAY_DAYS,
     END_MARKER,
@@ -41,6 +46,45 @@ class Titles(HTMLParser):
 
 
 class DataFileTests(unittest.TestCase):
+    def test_inbox_snapshot_is_upserted_into_internal_database(self):
+        today = date.today()
+        payload = {
+            "machine_id": "gray-mac",
+            "generated_at": datetime.now().astimezone().isoformat(),
+            "days": [
+                {
+                    "date": today.isoformat(),
+                    "input_tokens": 10,
+                    "cached_input_tokens": 80,
+                    "output_tokens": 10,
+                    "reasoning_tokens": 4,
+                    "total_tokens": 100,
+                    "request_count": 0,
+                    "cost_usd": 0.5,
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inbox = root / "inbox"
+            inbox.mkdir()
+            (inbox / "gray-mac.json").write_text(json.dumps(payload))
+            database = root / "usage.sqlite"
+            self.assertEqual(
+                import_ccusage_snapshots(database, inbox, "Asia/Shanghai"), 1
+            )
+            connection = connect(database)
+            row = connection.execute(
+                """
+                SELECT source, machine_id, total_tokens
+                FROM source_usage
+                WHERE date = ?
+                """,
+                (today.isoformat(),),
+            ).fetchone()
+            connection.close()
+        self.assertEqual(tuple(row), ("ccusage", "gray-mac", 100))
+
     def test_payload_contains_only_sixty_days_of_total_tokens(self):
         end = date(2026, 8, 21)
         payload = build_data_payload(

@@ -8,10 +8,10 @@
   <array>
     <string>/usr/bin/python3</string>
     <string>/Users/gray/.local/lib/token-heatmap/upload_ccusage.py</string>
-    <string>--endpoint</string>
-    <string>https://cpa.grayxu.cn/token-heatmap/api/v1/ccusage</string>
-    <string>--token-file</string>
-    <string>/Users/gray/.config/token-heatmap/ingest-token</string>
+    <string>--remote-host</string>
+    <string>ali</string>
+    <string>--remote-directory</string>
+    <string>/var/lib/token-heatmap/inbox</string>
     <string>--machine-id</string>
     <string>gray-mac</string>
     <string>--days</string>
