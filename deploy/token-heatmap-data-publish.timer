@@ -1,9 +1,8 @@
 [Unit]
-Description=Publish token usage data before twice-daily README updates
+Description=Publish token usage data before the daily README update
 
 [Timer]
-OnCalendar=*-*-* 11:50:00 Asia/Shanghai
-OnCalendar=*-*-* 23:50:00 Asia/Shanghai
+OnCalendar=*-*-* 21:50:00 Asia/Shanghai
 Persistent=true
 Unit=token-heatmap-data-publish.service
 

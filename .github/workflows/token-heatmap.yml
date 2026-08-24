@@ -3,8 +3,8 @@ name: Update token heatmap
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron is UTC: 04:00/16:00 = 12:00/00:00 Asia/Shanghai.
-    - cron: "0 4,16 * * *"
+    # GitHub cron is UTC: 14:00 = 22:00 Asia/Shanghai.
+    - cron: "0 14 * * *"
 
 permissions:
   contents: write
