@@ -256,7 +256,7 @@ def _summary_values(
 ) -> Tuple[int, int, int]:
     by_date = {usage.date: usage for usage in daily_usage}
     today_tokens = by_date.get(end_date).total_tokens if end_date in by_date else 0
-    week_start = end_date - timedelta(days=end_date.weekday())
+    week_start = end_date - timedelta(days=6)
     week_tokens = sum(
         usage.total_tokens
         for usage in daily_usage

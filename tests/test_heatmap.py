@@ -69,7 +69,7 @@ class HeatmapTests(unittest.TestCase):
             ],
         )
 
-    def test_summary_uses_today_monday_based_week_and_month(self):
+    def test_summary_uses_today_rolling_seven_days_and_month(self):
         end = date(2026, 8, 21)
         start = end - timedelta(days=364)
         section = render_section(
@@ -83,7 +83,7 @@ class HeatmapTests(unittest.TestCase):
             end,
         )
         self.assertIn(
-            'alt="30 today; 50 this week; 100 this month"', section
+            'alt="30 today; 60 this week; 100 this month"', section
         )
         self.assertRegex(section, r'assets/heatmap/stats-[0-9a-f]{12}\.svg')
         self.assertNotIn("last 365 days", section)
