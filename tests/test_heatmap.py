@@ -84,7 +84,7 @@ class HeatmapTests(unittest.TestCase):
             end,
         )
         self.assertIn(
-            'alt="30 today; 60 this week; 100 last 30d"', section
+            'alt="30 last 1d; 60 last 7d; 100 last 30d"', section
         )
         self.assertRegex(section, r'assets/heatmap/stats-[0-9a-f]{12}\.svg')
         self.assertNotIn("last 365 days", section)
@@ -96,8 +96,8 @@ class HeatmapTests(unittest.TestCase):
         )
         self.assertIn(f'width="{STATS_WIDTH}"', svg)
         self.assertIn(f'height="{STATS_HEIGHT}"', svg)
-        self.assertIn('<text x="0" y="30">30 today</text>', svg)
-        self.assertIn('<text x="0" y="78">50 this week</text>', svg)
+        self.assertIn('<text x="0" y="30">30 last 1d</text>', svg)
+        self.assertIn('<text x="0" y="78">50 last 7d</text>', svg)
         self.assertIn('<text x="0" y="126">50 last 30d</text>', svg)
 
     def test_static_assets_use_sixteen_pixel_cells(self):

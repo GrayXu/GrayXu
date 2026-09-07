@@ -275,8 +275,8 @@ def _summary_text(values: Tuple[int, int, int], separator: str) -> str:
     today_tokens, week_tokens, thirty_day_tokens = values
     return separator.join(
         (
-            f"{format_tokens(today_tokens)} today",
-            f"{format_tokens(week_tokens)} this week",
+            f"{format_tokens(today_tokens)} last 1d",
+            f"{format_tokens(week_tokens)} last 7d",
             f"{format_tokens(thirty_day_tokens)} last 30d",
         )
     )
@@ -295,8 +295,8 @@ def render_stats_svg(
         daily_usage, end_date
     )
     lines = (
-        (30, f"{format_tokens(today_tokens)} today"),
-        (78, f"{format_tokens(week_tokens)} this week"),
+        (30, f"{format_tokens(today_tokens)} last 1d"),
+        (78, f"{format_tokens(week_tokens)} last 7d"),
         (126, f"{format_tokens(thirty_day_tokens)} last 30d"),
     )
     text = "".join(
