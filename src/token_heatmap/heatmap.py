@@ -262,21 +262,22 @@ def _summary_values(
         for usage in daily_usage
         if week_start <= usage.date <= end_date
     )
-    month_tokens = sum(
+    thirty_day_start = end_date - timedelta(days=29)
+    thirty_day_tokens = sum(
         usage.total_tokens
         for usage in daily_usage
-        if usage.date.year == end_date.year and usage.date.month == end_date.month
+        if thirty_day_start <= usage.date <= end_date
     )
-    return today_tokens, week_tokens, month_tokens
+    return today_tokens, week_tokens, thirty_day_tokens
 
 
 def _summary_text(values: Tuple[int, int, int], separator: str) -> str:
-    today_tokens, week_tokens, month_tokens = values
+    today_tokens, week_tokens, thirty_day_tokens = values
     return separator.join(
         (
             f"{format_tokens(today_tokens)} today",
             f"{format_tokens(week_tokens)} this week",
-            f"{format_tokens(month_tokens)} this month",
+            f"{format_tokens(thirty_day_tokens)} last 30d",
         )
     )
 
@@ -290,11 +291,13 @@ def _stats_asset_name(values: Tuple[int, int, int]) -> str:
 def render_stats_svg(
     daily_usage: Sequence[AggregatedUsage], end_date: date
 ) -> str:
-    today_tokens, week_tokens, month_tokens = _summary_values(daily_usage, end_date)
+    today_tokens, week_tokens, thirty_day_tokens = _summary_values(
+        daily_usage, end_date
+    )
     lines = (
         (30, f"{format_tokens(today_tokens)} today"),
         (78, f"{format_tokens(week_tokens)} this week"),
-        (126, f"{format_tokens(month_tokens)} this month"),
+        (126, f"{format_tokens(thirty_day_tokens)} last 30d"),
     )
     text = "".join(
         f'<text x="0" y="{y}">{html.escape(label)}</text>' for y, label in lines

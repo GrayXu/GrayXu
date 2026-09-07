@@ -69,12 +69,13 @@ class HeatmapTests(unittest.TestCase):
             ],
         )
 
-    def test_summary_uses_today_rolling_seven_days_and_month(self):
+    def test_summary_uses_rolling_seven_and_thirty_day_windows(self):
         end = date(2026, 8, 21)
         start = end - timedelta(days=364)
         section = render_section(
             [
-                usage(date(2026, 8, 1), total=40),
+                usage(date(2026, 7, 22), total=100),
+                usage(date(2026, 7, 23), total=40),
                 usage(date(2026, 8, 16), total=10),
                 usage(date(2026, 8, 17), total=20),
                 usage(end, total=30),
@@ -83,7 +84,7 @@ class HeatmapTests(unittest.TestCase):
             end,
         )
         self.assertIn(
-            'alt="30 today; 60 this week; 100 this month"', section
+            'alt="30 today; 60 this week; 100 last 30d"', section
         )
         self.assertRegex(section, r'assets/heatmap/stats-[0-9a-f]{12}\.svg')
         self.assertNotIn("last 365 days", section)
@@ -97,7 +98,7 @@ class HeatmapTests(unittest.TestCase):
         self.assertIn(f'height="{STATS_HEIGHT}"', svg)
         self.assertIn('<text x="0" y="30">30 today</text>', svg)
         self.assertIn('<text x="0" y="78">50 this week</text>', svg)
-        self.assertIn('<text x="0" y="126">50 this month</text>', svg)
+        self.assertIn('<text x="0" y="126">50 last 30d</text>', svg)
 
     def test_static_assets_use_sixteen_pixel_cells(self):
         with tempfile.TemporaryDirectory() as directory:
