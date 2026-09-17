@@ -3,7 +3,7 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
-from token_heatmap.app import build_days, copy_snapshot, load_config
+from token_heatmap.app import build_days, copy_snapshot, load_config, merge_days, run_ccusage
 
 
 class AppTests(unittest.TestCase):
@@ -26,6 +26,34 @@ class AppTests(unittest.TestCase):
         self.assertEqual(days[0]["reasoning_tokens"], 4)
         self.assertEqual(days[0]["total_tokens"], 100)
         self.assertEqual(days[1]["total_tokens"], 0)
+
+    def test_merge_days_combines_agent_reports(self):
+        reports = [
+            {"daily": [{"date": "2026-08-20", "inputTokens": 10, "totalTokens": 10}]},
+            {
+                "daily": [
+                    {
+                        "date": "2026-08-20",
+                        "outputTokens": 5,
+                        "totalTokens": 5,
+                        "totalCost": 0.25,
+                    }
+                ]
+            },
+        ]
+        days = merge_days(reports, date(2026, 8, 20), date(2026, 8, 20))
+        self.assertEqual(days[0]["input_tokens"], 10)
+        self.assertEqual(days[0]["output_tokens"], 5)
+        self.assertEqual(days[0]["total_tokens"], 15)
+        self.assertEqual(days[0]["cost_usd"], 0.25)
+
+    @patch("token_heatmap.app.subprocess.run")
+    def test_run_ccusage_only_uses_fast_mode_for_codex(self, run):
+        run.return_value.stdout = '{"daily": []}'
+        run_ccusage("codex", "bunx", "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
+        run_ccusage("opencode", "bunx", "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
+        self.assertIn("--speed", run.call_args_list[0].args[0])
+        self.assertNotIn("--speed", run.call_args_list[1].args[0])
 
     @patch("token_heatmap.app.subprocess.run")
     def test_copy_snapshot_uses_scp_then_atomic_remote_move(self, run):

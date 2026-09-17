@@ -69,9 +69,9 @@ def build_days(report: Dict[str, Any], start_date: date, end_date: date) -> List
     current = start_date
     while current <= end_date:
         item = by_date.get(current.isoformat(), {})
-        cost = item.get("costUSD", 0.0)
+        cost = item.get("costUSD", item.get("totalCost", 0.0))
         if isinstance(cost, bool) or not isinstance(cost, (int, float)) or cost < 0:
-            raise RuntimeError("ccusage returned an invalid costUSD")
+            raise RuntimeError("ccusage returned an invalid cost")
         days.append(
             {
                 "date": current.isoformat(),
@@ -88,17 +88,32 @@ def build_days(report: Dict[str, Any], start_date: date, end_date: date) -> List
     return days
 
 
+def merge_days(reports: List[Dict[str, Any]], start_date: date, end_date: date) -> List[dict]:
+    merged = build_days({"daily": []}, start_date, end_date)
+    fields = (
+        "input_tokens",
+        "cached_input_tokens",
+        "output_tokens",
+        "reasoning_tokens",
+        "total_tokens",
+        "request_count",
+        "cost_usd",
+    )
+    for report in reports:
+        for target, source in zip(merged, build_days(report, start_date, end_date)):
+            for field in fields:
+                target[field] += source[field]
+    return merged
+
+
 def run_ccusage(
-    bunx: str, timezone_name: str, start_date: date, end_date: date
+    agent: str, bunx: str, timezone_name: str, start_date: date, end_date: date
 ) -> Dict[str, Any]:
-    completed = subprocess.run(
+    command = [bunx, "ccusage", agent, "daily"]
+    if agent == "codex":
+        command.extend(["--speed", "fast"])
+    command.extend(
         [
-            bunx,
-            "ccusage",
-            "codex",
-            "daily",
-            "--speed",
-            "fast",
             "--timezone",
             timezone_name,
             "--since",
@@ -107,7 +122,10 @@ def run_ccusage(
             end_date.isoformat(),
             "--json",
             "--no-color",
-        ],
+        ]
+    )
+    completed = subprocess.run(
+        command,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -172,13 +190,24 @@ def sync_sender(config: configparser.ConfigParser) -> None:
     if not bunx:
         raise RuntimeError("bunx was not found")
     machine_id = config.get("sender", "machine_id", fallback=default_machine_id())
+    agents = [
+        agent.strip()
+        for agent in config.get(
+            "sender", "agents", fallback="codex,qodercli,opencode,pi"
+        ).split(",")
+        if agent.strip()
+    ]
+    if not agents:
+        raise RuntimeError("sender agents must not be empty")
     today = datetime.now(timezone).date()
     start_date = today - timedelta(days=days - 1)
-    report = run_ccusage(bunx, timezone_name, start_date, today)
+    reports = [
+        run_ccusage(agent, bunx, timezone_name, start_date, today) for agent in agents
+    ]
     payload = {
         "machine_id": machine_id,
         "generated_at": datetime.now(timezone).isoformat(),
-        "days": build_days(report, start_date, today),
+        "days": merge_days(reports, start_date, today),
     }
     copy_snapshot(
         required(config, "sender", "ssh_host"),
