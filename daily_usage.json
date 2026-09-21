@@ -230,19 +230,19 @@
     },
     {
       "date": "2026-09-19",
-      "total_tokens": 12914853
+      "total_tokens": 101595226
     },
     {
       "date": "2026-09-20",
-      "total_tokens": 89054216
+      "total_tokens": 316522988
     },
     {
       "date": "2026-09-21",
-      "total_tokens": 377359210
+      "total_tokens": 773210628
     }
   ],
   "end_date": "2026-09-21",
-  "generated_at": "2026-09-21T16:04:02.017633+08:00",
+  "generated_at": "2026-09-21T23:50:16.522921+08:00",
   "schema_version": 1,
   "start_date": "2026-07-24",
   "timezone": "Asia/Shanghai"
