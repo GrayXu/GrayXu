@@ -1,9 +1,17 @@
 import unittest
 from datetime import date
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-from token_heatmap.app import build_days, copy_snapshot, load_config, merge_days, run_ccusage
+from token_heatmap.app import (
+    build_days,
+    copy_snapshot,
+    filtered_codex_home,
+    load_config,
+    merge_days,
+    run_ccusage,
+)
 
 
 class AppTests(unittest.TestCase):
@@ -54,6 +62,22 @@ class AppTests(unittest.TestCase):
         run_ccusage("opencode", "bunx", "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
         self.assertIn("--speed", run.call_args_list[0].args[0])
         self.assertNotIn("--speed", run.call_args_list[1].args[0])
+
+    def test_filtered_codex_home_excludes_cpa_sessions(self):
+        with TemporaryDirectory() as directory:
+            source = Path(directory) / "source"
+            sessions = source / "sessions" / "2026" / "08"
+            sessions.mkdir(parents=True)
+            (sessions / "cpa.jsonl").write_text(
+                '{"type":"session_meta","payload":{"model_provider":"cpa"}}\n'
+            )
+            (sessions / "openai.jsonl").write_text(
+                '{"type":"session_meta","payload":{"model_provider":"openai"}}\n'
+            )
+            with patch.dict("token_heatmap.app.os.environ", {"CODEX_HOME": str(source)}):
+                with filtered_codex_home({"cpa"}) as filtered:
+                    files = sorted(path.name for path in Path(filtered).rglob("*.jsonl"))
+            self.assertEqual(files, ["openai.jsonl"])
 
     @patch("token_heatmap.app.subprocess.run")
     def test_copy_snapshot_uses_scp_then_atomic_remote_move(self, run):

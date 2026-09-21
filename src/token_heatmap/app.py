@@ -8,9 +8,10 @@ import shutil
 import socket
 import subprocess
 import tempfile
+from contextlib import contextmanager, nullcontext
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterator, List, Set
 from zoneinfo import ZoneInfo
 
 from .data import (
@@ -106,8 +107,52 @@ def merge_days(reports: List[Dict[str, Any]], start_date: date, end_date: date) 
     return merged
 
 
+def codex_session_provider(path: Path) -> str:
+    try:
+        with path.open() as stream:
+            entry = json.loads(stream.readline())
+    except (OSError, json.JSONDecodeError):
+        return ""
+    if not isinstance(entry, dict) or entry.get("type") != "session_meta":
+        return ""
+    if not isinstance(entry.get("payload"), dict):
+        return ""
+    provider = entry["payload"].get("model_provider")
+    return provider if isinstance(provider, str) else ""
+
+
+@contextmanager
+def filtered_codex_home(excluded_providers: Set[str]) -> Iterator[str]:
+    source_homes = [
+        Path(value.strip())
+        for value in os.environ.get("CODEX_HOME", str(Path.home() / ".codex")).split(",")
+        if value.strip()
+    ]
+    with tempfile.TemporaryDirectory(prefix="token-heatmap-codex-") as directory:
+        filtered_homes = []
+        for index, source_home in enumerate(source_homes):
+            target_home = Path(directory) / str(index)
+            filtered_homes.append(str(target_home))
+            roots = [source_home / name for name in ("sessions", "archived_sessions")]
+            roots = [root for root in roots if root.is_dir()] or [source_home]
+            for root in roots:
+                target_root = target_home / root.relative_to(source_home)
+                for source in root.rglob("*.jsonl"):
+                    if codex_session_provider(source) in excluded_providers:
+                        continue
+                    target = target_root / source.relative_to(root)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    os.link(source, target)
+        yield ",".join(filtered_homes)
+
+
 def run_ccusage(
-    agent: str, bunx: str, timezone_name: str, start_date: date, end_date: date
+    agent: str,
+    bunx: str,
+    timezone_name: str,
+    start_date: date,
+    end_date: date,
+    codex_home: str = "",
 ) -> Dict[str, Any]:
     command = [bunx, "ccusage", agent, "daily"]
     if agent == "codex":
@@ -124,6 +169,9 @@ def run_ccusage(
             "--no-color",
         ]
     )
+    environment = os.environ.copy()
+    if codex_home:
+        environment["CODEX_HOME"] = codex_home
     completed = subprocess.run(
         command,
         check=True,
@@ -131,6 +179,7 @@ def run_ccusage(
         stderr=subprocess.PIPE,
         text=True,
         timeout=300,
+        env=environment,
     )
     result = json.loads(completed.stdout)
     if not isinstance(result, dict):
@@ -199,11 +248,32 @@ def sync_sender(config: configparser.ConfigParser) -> None:
     ]
     if not agents:
         raise RuntimeError("sender agents must not be empty")
+    excluded_codex_providers = {
+        provider.strip()
+        for provider in config.get(
+            "sender", "exclude_codex_providers", fallback=""
+        ).split(",")
+        if provider.strip()
+    }
     today = datetime.now(timezone).date()
     start_date = today - timedelta(days=days - 1)
-    reports = [
-        run_ccusage(agent, bunx, timezone_name, start_date, today) for agent in agents
-    ]
+    codex_filter = (
+        filtered_codex_home(excluded_codex_providers)
+        if "codex" in agents and excluded_codex_providers
+        else nullcontext("")
+    )
+    with codex_filter as codex_home:
+        reports = [
+            run_ccusage(
+                agent,
+                bunx,
+                timezone_name,
+                start_date,
+                today,
+                codex_home if agent == "codex" else "",
+            )
+            for agent in agents
+        ]
     payload = {
         "machine_id": machine_id,
         "generated_at": datetime.now(timezone).isoformat(),
