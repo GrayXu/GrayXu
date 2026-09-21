@@ -1,12 +1,8 @@
 {
   "days": [
     {
-      "date": "2026-07-23",
-      "total_tokens": 265026296
-    },
-    {
       "date": "2026-07-24",
-      "total_tokens": 593757566
+      "total_tokens": 316193130
     },
     {
       "date": "2026-07-25",
@@ -14,83 +10,83 @@
     },
     {
       "date": "2026-07-26",
-      "total_tokens": 206094844
+      "total_tokens": 128881479
     },
     {
       "date": "2026-07-27",
-      "total_tokens": 846062735
+      "total_tokens": 473916759
     },
     {
       "date": "2026-07-28",
-      "total_tokens": 873623908
+      "total_tokens": 483918047
     },
     {
       "date": "2026-07-29",
-      "total_tokens": 694950341
+      "total_tokens": 410103825
     },
     {
       "date": "2026-07-30",
-      "total_tokens": 746006129
+      "total_tokens": 407465922
     },
     {
       "date": "2026-07-31",
-      "total_tokens": 1051552167
+      "total_tokens": 549121165
     },
     {
       "date": "2026-08-01",
-      "total_tokens": 123468894
+      "total_tokens": 63022273
     },
     {
       "date": "2026-08-02",
-      "total_tokens": 104199268
+      "total_tokens": 56047252
     },
     {
       "date": "2026-08-03",
-      "total_tokens": 1121884568
+      "total_tokens": 715793552
     },
     {
       "date": "2026-08-04",
-      "total_tokens": 573359788
+      "total_tokens": 346430461
     },
     {
       "date": "2026-08-05",
-      "total_tokens": 625946765
+      "total_tokens": 344163581
     },
     {
       "date": "2026-08-06",
-      "total_tokens": 869079735
+      "total_tokens": 488565038
     },
     {
       "date": "2026-08-07",
-      "total_tokens": 301153294
+      "total_tokens": 5343497
     },
     {
       "date": "2026-08-08",
-      "total_tokens": 25975789
+      "total_tokens": 18448084
     },
     {
       "date": "2026-08-09",
-      "total_tokens": 465204338
+      "total_tokens": 450548833
     },
     {
       "date": "2026-08-10",
-      "total_tokens": 77922337
+      "total_tokens": 2346048
     },
     {
       "date": "2026-08-11",
-      "total_tokens": 433612661
+      "total_tokens": 98845218
     },
     {
       "date": "2026-08-12",
-      "total_tokens": 183098740
+      "total_tokens": 43585781
     },
     {
       "date": "2026-08-13",
-      "total_tokens": 843020673
+      "total_tokens": 166856094
     },
     {
       "date": "2026-08-14",
-      "total_tokens": 87202259
+      "total_tokens": 22903495
     },
     {
       "date": "2026-08-15",
@@ -98,83 +94,83 @@
     },
     {
       "date": "2026-08-16",
-      "total_tokens": 13873588
+      "total_tokens": 12920601
     },
     {
       "date": "2026-08-17",
-      "total_tokens": 536000165
+      "total_tokens": 168850536
     },
     {
       "date": "2026-08-18",
-      "total_tokens": 580445938
+      "total_tokens": 231789490
     },
     {
       "date": "2026-08-19",
-      "total_tokens": 862904592
+      "total_tokens": 225543523
     },
     {
       "date": "2026-08-20",
-      "total_tokens": 324034960
+      "total_tokens": 22544253
     },
     {
       "date": "2026-08-21",
-      "total_tokens": 359488052
+      "total_tokens": 17977471
     },
     {
       "date": "2026-08-22",
-      "total_tokens": 10487429
+      "total_tokens": 8867046
     },
     {
       "date": "2026-08-23",
-      "total_tokens": 237270838
+      "total_tokens": 20252332
     },
     {
       "date": "2026-08-24",
-      "total_tokens": 660320610
+      "total_tokens": 1682578
     },
     {
       "date": "2026-08-25",
-      "total_tokens": 512754492
+      "total_tokens": 5770449
     },
     {
       "date": "2026-08-26",
-      "total_tokens": 1027522262
+      "total_tokens": 3061343
     },
     {
       "date": "2026-08-27",
-      "total_tokens": 790058912
+      "total_tokens": 27996210
     },
     {
       "date": "2026-08-28",
-      "total_tokens": 1345597847
+      "total_tokens": 6643059
     },
     {
       "date": "2026-08-29",
-      "total_tokens": 680193509
+      "total_tokens": 1370531
     },
     {
       "date": "2026-08-30",
-      "total_tokens": 112412397
+      "total_tokens": 3896465
     },
     {
       "date": "2026-08-31",
-      "total_tokens": 1661970448
+      "total_tokens": 327677969
     },
     {
       "date": "2026-09-01",
-      "total_tokens": 2188364579
+      "total_tokens": 1038441357
     },
     {
       "date": "2026-09-02",
-      "total_tokens": 862124327
+      "total_tokens": 61480749
     },
     {
       "date": "2026-09-03",
-      "total_tokens": 1229870981
+      "total_tokens": 4191553
     },
     {
       "date": "2026-09-04",
-      "total_tokens": 328718981
+      "total_tokens": 7686452
     },
     {
       "date": "2026-09-05",
@@ -186,47 +182,47 @@
     },
     {
       "date": "2026-09-07",
-      "total_tokens": 566245336
+      "total_tokens": 177007043
     },
     {
       "date": "2026-09-08",
-      "total_tokens": 275854815
+      "total_tokens": 20143328
     },
     {
       "date": "2026-09-09",
-      "total_tokens": 1070083157
+      "total_tokens": 1450539
     },
     {
       "date": "2026-09-10",
-      "total_tokens": 251642353
+      "total_tokens": 3161314
     },
     {
       "date": "2026-09-11",
-      "total_tokens": 476136411
+      "total_tokens": 6998787
     },
     {
       "date": "2026-09-12",
-      "total_tokens": 16509497
+      "total_tokens": 926916
     },
     {
       "date": "2026-09-13",
-      "total_tokens": 24409065
+      "total_tokens": 17948363
     },
     {
       "date": "2026-09-14",
-      "total_tokens": 159963992
+      "total_tokens": 62874661
     },
     {
       "date": "2026-09-15",
-      "total_tokens": 583955728
+      "total_tokens": 305735761
     },
     {
       "date": "2026-09-16",
-      "total_tokens": 266928798
+      "total_tokens": 16186802
     },
     {
       "date": "2026-09-17",
-      "total_tokens": 196423836
+      "total_tokens": 32673455
     },
     {
       "date": "2026-09-18",
@@ -238,12 +234,16 @@
     },
     {
       "date": "2026-09-20",
-      "total_tokens": 83442290
+      "total_tokens": 89054216
+    },
+    {
+      "date": "2026-09-21",
+      "total_tokens": 372694587
     }
   ],
-  "end_date": "2026-09-20",
-  "generated_at": "2026-09-20T23:50:15.802955+08:00",
+  "end_date": "2026-09-21",
+  "generated_at": "2026-09-21T15:54:55.571550+08:00",
   "schema_version": 1,
-  "start_date": "2026-07-23",
+  "start_date": "2026-07-24",
   "timezone": "Asia/Shanghai"
 }
