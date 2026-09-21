@@ -148,13 +148,13 @@ def filtered_codex_home(excluded_providers: Set[str]) -> Iterator[str]:
 
 def run_ccusage(
     agent: str,
-    bunx: str,
+    ccusage_command: List[str],
     timezone_name: str,
     start_date: date,
     end_date: date,
     codex_home: str = "",
 ) -> Dict[str, Any]:
-    command = [bunx, "ccusage", agent, "daily"]
+    command = [*ccusage_command, agent, "daily"]
     if agent == "codex":
         command.extend(["--speed", "fast"])
     command.extend(
@@ -234,10 +234,16 @@ def sync_sender(config: configparser.ConfigParser) -> None:
     days = config.getint("sender", "days", fallback=3)
     if not 1 <= days <= 400:
         raise RuntimeError("sender days must be between 1 and 400")
-    bunx = config.get("sender", "bunx", fallback="bunx")
-    bunx = bunx if "/" in bunx else shutil.which(bunx)
-    if not bunx:
-        raise RuntimeError("bunx was not found")
+    raw_command = config.get("sender", "ccusage_command", fallback="").strip()
+    ccusage_command = shlex.split(raw_command) if raw_command else [
+        config.get("sender", "bunx", fallback="bunx"),
+        "ccusage",
+    ]
+    executable = ccusage_command[0]
+    executable = executable if "/" in executable else shutil.which(executable)
+    if not executable:
+        raise RuntimeError("ccusage command was not found")
+    ccusage_command[0] = executable
     machine_id = config.get("sender", "machine_id", fallback=default_machine_id())
     agents = [
         agent.strip()
@@ -266,7 +272,7 @@ def sync_sender(config: configparser.ConfigParser) -> None:
         reports = [
             run_ccusage(
                 agent,
-                bunx,
+                ccusage_command,
                 timezone_name,
                 start_date,
                 today,

@@ -58,8 +58,9 @@ class AppTests(unittest.TestCase):
     @patch("token_heatmap.app.subprocess.run")
     def test_run_ccusage_only_uses_fast_mode_for_codex(self, run):
         run.return_value.stdout = '{"daily": []}'
-        run_ccusage("codex", "bunx", "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
-        run_ccusage("opencode", "bunx", "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
+        command = ["bunx", "ccusage"]
+        run_ccusage("codex", command, "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
+        run_ccusage("opencode", command, "Asia/Shanghai", date(2026, 8, 20), date(2026, 8, 20))
         self.assertIn("--speed", run.call_args_list[0].args[0])
         self.assertNotIn("--speed", run.call_args_list[1].args[0])
 
