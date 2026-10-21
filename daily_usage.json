@@ -1,56 +1,52 @@
 {
   "days": [
     {
-      "date": "2026-08-23",
-      "total_tokens": 20252332
-    },
-    {
       "date": "2026-08-24",
-      "total_tokens": 1682578
+      "total_tokens": 660320610
     },
     {
       "date": "2026-08-25",
-      "total_tokens": 5770449
+      "total_tokens": 512754492
     },
     {
       "date": "2026-08-26",
-      "total_tokens": 3061343
+      "total_tokens": 1027522262
     },
     {
       "date": "2026-08-27",
-      "total_tokens": 27996210
+      "total_tokens": 790058912
     },
     {
       "date": "2026-08-28",
-      "total_tokens": 6643059
+      "total_tokens": 1345597847
     },
     {
       "date": "2026-08-29",
-      "total_tokens": 1370531
+      "total_tokens": 680193509
     },
     {
       "date": "2026-08-30",
-      "total_tokens": 3896465
+      "total_tokens": 112412397
     },
     {
       "date": "2026-08-31",
-      "total_tokens": 327677969
+      "total_tokens": 1661970448
     },
     {
       "date": "2026-09-01",
-      "total_tokens": 1038441357
+      "total_tokens": 2188364579
     },
     {
       "date": "2026-09-02",
-      "total_tokens": 61480749
+      "total_tokens": 862124327
     },
     {
       "date": "2026-09-03",
-      "total_tokens": 4191553
+      "total_tokens": 1229870981
     },
     {
       "date": "2026-09-04",
-      "total_tokens": 7686452
+      "total_tokens": 328718981
     },
     {
       "date": "2026-09-05",
@@ -62,47 +58,47 @@
     },
     {
       "date": "2026-09-07",
-      "total_tokens": 177007043
+      "total_tokens": 566245336
     },
     {
       "date": "2026-09-08",
-      "total_tokens": 20143328
+      "total_tokens": 275854815
     },
     {
       "date": "2026-09-09",
-      "total_tokens": 1450539
+      "total_tokens": 1070083157
     },
     {
       "date": "2026-09-10",
-      "total_tokens": 3161314
+      "total_tokens": 251642353
     },
     {
       "date": "2026-09-11",
-      "total_tokens": 6998787
+      "total_tokens": 476136411
     },
     {
       "date": "2026-09-12",
-      "total_tokens": 926916
+      "total_tokens": 16509497
     },
     {
       "date": "2026-09-13",
-      "total_tokens": 17948363
+      "total_tokens": 24409065
     },
     {
       "date": "2026-09-14",
-      "total_tokens": 62874661
+      "total_tokens": 159963992
     },
     {
       "date": "2026-09-15",
-      "total_tokens": 305735761
+      "total_tokens": 583955728
     },
     {
       "date": "2026-09-16",
-      "total_tokens": 16186802
+      "total_tokens": 266928798
     },
     {
       "date": "2026-09-17",
-      "total_tokens": 32673455
+      "total_tokens": 196423836
     },
     {
       "date": "2026-09-18",
@@ -154,11 +150,11 @@
     },
     {
       "date": "2026-09-30",
-      "total_tokens": 155377467
+      "total_tokens": 696702468
     },
     {
       "date": "2026-10-01",
-      "total_tokens": 5833181
+      "total_tokens": 315197248
     },
     {
       "date": "2026-10-02",
@@ -238,12 +234,16 @@
     },
     {
       "date": "2026-10-21",
-      "total_tokens": 1249183274
+      "total_tokens": 1264029131
+    },
+    {
+      "date": "2026-10-22",
+      "total_tokens": 1391400
     }
   ],
-  "end_date": "2026-10-21",
-  "generated_at": "2026-10-21T23:57:31.649000+08:00",
+  "end_date": "2026-10-22",
+  "generated_at": "2026-10-22T00:12:14.830678+08:00",
   "schema_version": 1,
-  "start_date": "2026-08-23",
+  "start_date": "2026-08-24",
   "timezone": "Asia/Shanghai"
 }
