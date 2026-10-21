@@ -85,13 +85,13 @@ INSERT INTO source_usage (
     cost_usd, updated_at
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(date, source, machine_id) DO UPDATE SET
-    input_tokens = excluded.input_tokens,
-    cached_input_tokens = excluded.cached_input_tokens,
-    output_tokens = excluded.output_tokens,
-    reasoning_tokens = excluded.reasoning_tokens,
-    total_tokens = excluded.total_tokens,
-    request_count = excluded.request_count,
-    cost_usd = excluded.cost_usd,
+    input_tokens = MAX(source_usage.input_tokens, excluded.input_tokens),
+    cached_input_tokens = MAX(source_usage.cached_input_tokens, excluded.cached_input_tokens),
+    output_tokens = MAX(source_usage.output_tokens, excluded.output_tokens),
+    reasoning_tokens = MAX(source_usage.reasoning_tokens, excluded.reasoning_tokens),
+    total_tokens = MAX(source_usage.total_tokens, excluded.total_tokens),
+    request_count = MAX(source_usage.request_count, excluded.request_count),
+    cost_usd = MAX(source_usage.cost_usd, excluded.cost_usd),
     updated_at = excluded.updated_at
 """
 
@@ -146,10 +146,9 @@ def aggregate_range(
     updated_at = datetime.now(timezone.utc).isoformat()
     start = start_date.isoformat()
     end = end_date.isoformat()
+    # Exact published totals can survive longer than the local source records.
+    # Keep that floor without fabricating missing CCUsage or CPA breakdowns.
     with transaction(connection):
-        connection.execute(
-            "DELETE FROM daily_usage WHERE date BETWEEN ? AND ?", (start, end)
-        )
         connection.execute(
             """
             INSERT INTO daily_usage (
@@ -172,6 +171,17 @@ def aggregate_range(
             FROM source_usage
             WHERE date BETWEEN ? AND ?
             GROUP BY date
+            ON CONFLICT(date) DO UPDATE SET
+                ccusage_tokens = excluded.ccusage_tokens,
+                cpa_tokens = excluded.cpa_tokens,
+                input_tokens = excluded.input_tokens,
+                cached_input_tokens = excluded.cached_input_tokens,
+                output_tokens = excluded.output_tokens,
+                reasoning_tokens = excluded.reasoning_tokens,
+                total_tokens = MAX(daily_usage.total_tokens, excluded.total_tokens),
+                request_count = excluded.request_count,
+                cost_usd = excluded.cost_usd,
+                updated_at = excluded.updated_at
             """,
             (updated_at, start, end),
         )
