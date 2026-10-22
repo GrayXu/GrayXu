@@ -261,8 +261,8 @@ def sync_sender(config: configparser.ConfigParser) -> None:
         ).split(",")
         if provider.strip()
     }
-    today = datetime.now(timezone).date()
-    start_date = today - timedelta(days=days - 1)
+    end_date = datetime.now(timezone).date() - timedelta(days=1)
+    start_date = end_date - timedelta(days=days - 1)
     codex_filter = (
         filtered_codex_home(excluded_codex_providers)
         if "codex" in agents and excluded_codex_providers
@@ -275,7 +275,7 @@ def sync_sender(config: configparser.ConfigParser) -> None:
                 ccusage_command,
                 timezone_name,
                 start_date,
-                today,
+                end_date,
                 codex_home if agent == "codex" else "",
             )
             for agent in agents
@@ -283,7 +283,7 @@ def sync_sender(config: configparser.ConfigParser) -> None:
     payload = {
         "machine_id": machine_id,
         "generated_at": datetime.now(timezone).isoformat(),
-        "days": merge_days(reports, start_date, today),
+        "days": merge_days(reports, start_date, end_date),
     }
     copy_snapshot(
         required(config, "sender", "ssh_host"),
@@ -329,15 +329,15 @@ def sync_primary(config: configparser.ConfigParser) -> None:
 
     sync_branch(data_repo, data_branch)
     import_ccusage_snapshots(database, inbox, timezone_name)
-    today = datetime.now(timezone).date()
+    end_date = datetime.now(timezone).date() - timedelta(days=1)
     daily_usage = refresh_daily_usage(
         database,
         Path(cpa) if cpa else None,
         timezone_name,
         history_days,
-        today,
+        end_date,
     )
-    write_data_file(data_repo / "daily_usage.json", daily_usage, timezone_name, today)
+    write_data_file(data_repo / "daily_usage.json", daily_usage, timezone_name, end_date)
     git(data_repo, "add", "--", "daily_usage.json")
     if git(data_repo, "diff", "--cached", "--quiet", check=False).returncode:
         author = config.get("primary", "git_author_name", fallback="Token Heatmap Bot")

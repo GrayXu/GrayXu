@@ -1,8 +1,13 @@
+import configparser
+import json
+import subprocess
+import sys
 import unittest
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
+from zoneinfo import ZoneInfo
 
 from token_heatmap.app import (
     build_days,
@@ -11,10 +16,124 @@ from token_heatmap.app import (
     load_config,
     merge_days,
     run_ccusage,
+    sync_primary,
+    sync_sender,
 )
+from token_heatmap.models import AggregatedUsage
 
 
 class AppTests(unittest.TestCase):
+    def test_primary_publishes_only_completed_days_in_configured_timezone(self):
+        cases = (
+            ("2026-10-21T15:59:00+00:00", date(2026, 10, 20)),
+            ("2026-10-21T16:01:00+00:00", date(2026, 10, 21)),
+            ("2026-03-31T16:00:00+00:00", date(2026, 3, 31)),
+            ("2026-12-31T16:00:00+00:00", date(2026, 12, 31)),
+            ("2024-02-29T16:00:00+00:00", date(2024, 2, 29)),
+        )
+        for instant, end_date in cases:
+            with self.subTest(instant=instant), TemporaryDirectory() as directory:
+                root = Path(directory)
+                config = configparser.ConfigParser()
+                config.read_dict(
+                    {
+                        "app": {"timezone": "Asia/Shanghai"},
+                        "primary": {
+                            "database": str(root / "usage.sqlite"),
+                            "inbox": str(root / "inbox"),
+                            "data_repo": str(root),
+                        },
+                    }
+                )
+                totals = [
+                    AggregatedUsage(day, 0, 0, 0, 0, 0, 0, total, 0, 0.0)
+                    for day, total in (
+                        (end_date, 42),
+                        (end_date + timedelta(days=1), 9999),
+                    )
+                ]
+                frozen = datetime.fromisoformat(instant)
+                with (
+                    patch("token_heatmap.app.datetime") as clock,
+                    patch("token_heatmap.app.sync_branch"),
+                    patch("token_heatmap.app.import_ccusage_snapshots"),
+                    patch(
+                        "token_heatmap.app.refresh_daily_usage", return_value=totals
+                    ) as refresh,
+                    patch(
+                        "token_heatmap.app.git",
+                        return_value=subprocess.CompletedProcess([], 0, stdout="0"),
+                    ),
+                ):
+                    clock.now.side_effect = lambda zone: frozen.astimezone(zone)
+                    sync_primary(config)
+                self.assertEqual(refresh.call_args.args[-1], end_date)
+                payload = json.loads((root / "daily_usage.json").read_text())
+                self.assertEqual(payload["end_date"], end_date.isoformat())
+                self.assertEqual(
+                    payload["start_date"], (end_date - timedelta(days=59)).isoformat()
+                )
+                self.assertEqual(
+                    payload["days"][-1],
+                    {"date": end_date.isoformat(), "total_tokens": 42},
+                )
+                self.assertEqual(len(payload["days"]), 60)
+                self.assertTrue(
+                    all(
+                        date.fromisoformat(row["date"]) <= end_date
+                        for row in payload["days"]
+                    )
+                )
+
+    def test_sender_reports_three_completed_days_without_today(self):
+        for instant, end_date in (
+            ("2026-10-21T15:59:00+00:00", date(2026, 10, 20)),
+            ("2026-10-21T16:01:00+00:00", date(2026, 10, 21)),
+        ):
+            with self.subTest(instant=instant):
+                config = configparser.ConfigParser()
+                config.read_dict(
+                    {
+                        "app": {"timezone": "Asia/Shanghai"},
+                        "sender": {
+                            "ccusage_command": sys.executable,
+                            "agents": "codex",
+                            "days": "3",
+                            "machine_id": "mac",
+                            "ssh_host": "primary",
+                            "remote_inbox": "/inbox",
+                        },
+                    }
+                )
+                report = {
+                    "daily": [
+                        {"date": end_date.isoformat(), "totalTokens": 42},
+                        {
+                            "date": (end_date + timedelta(days=1)).isoformat(),
+                            "totalTokens": 9999,
+                        },
+                    ]
+                }
+                frozen = datetime.fromisoformat(instant)
+                with (
+                    patch("token_heatmap.app.datetime") as clock,
+                    patch("token_heatmap.app.run_ccusage", return_value=report) as run,
+                    patch("token_heatmap.app.copy_snapshot") as copy,
+                ):
+                    clock.now.side_effect = lambda zone: frozen.astimezone(zone)
+                    sync_sender(config)
+                self.assertEqual(
+                    run.call_args.args[3:5], (end_date - timedelta(days=2), end_date)
+                )
+                payload = copy.call_args.args[2]
+                self.assertEqual(len(payload["days"]), 3)
+                self.assertEqual(payload["days"][-1]["date"], end_date.isoformat())
+                self.assertEqual(payload["days"][-1]["total_tokens"], 42)
+                self.assertEqual(
+                    payload["generated_at"],
+                    frozen.astimezone(ZoneInfo("Asia/Shanghai")).isoformat(),
+                )
+
     def test_build_days_normalizes_ccusage_and_fills_missing_dates(self):
         report = {
             "daily": [
