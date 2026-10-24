@@ -1,10 +1,6 @@
 {
   "days": [
     {
-      "date": "2026-08-25",
-      "total_tokens": 512754492
-    },
-    {
       "date": "2026-08-26",
       "total_tokens": 1027522262
     },
@@ -239,11 +235,15 @@
     {
       "date": "2026-10-23",
       "total_tokens": 1324899255
+    },
+    {
+      "date": "2026-10-24",
+      "total_tokens": 657178060
     }
   ],
-  "end_date": "2026-10-23",
-  "generated_at": "2026-10-24T00:35:20.139593+08:00",
+  "end_date": "2026-10-24",
+  "generated_at": "2026-10-25T00:35:22.512112+08:00",
   "schema_version": 1,
-  "start_date": "2026-08-25",
+  "start_date": "2026-08-26",
   "timezone": "Asia/Shanghai"
 }
